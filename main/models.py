@@ -7,12 +7,11 @@ class Item(models.Model):
     description = models.TextField()
 
     # Atribut tambahan yang relevan untuk e-commerce
-    category = models.CharField(max_length=100)  # Kategori barang
-    name_menu = models.DateField(auto_now_add=True)  # nama menu
-    quantity_ordered = models.IntegerField(default=0)  # Default jumlah pesanan adalah 0
     stock = models.IntegerField(default=0)  # Stok barang
+    category = models.CharField(max_length=100)  # Kategori barang
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)  # Rating barang
     date_added = models.DateField(auto_now_add=True)  # Tanggal barang ditambahkan
+    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)  # Diskon barang dalam persentase
 
     def __str__(self):
         return self.name
@@ -20,3 +19,7 @@ class Item(models.Model):
     @property
     def is_in_stock(self):
         return self.stock > 0  # Menampilkan apakah barang tersedia
+
+    @property
+    def final_price(self):
+        return self.price - (self.price * (self.discount / 100))  # Menghitung harga setelah diskon
