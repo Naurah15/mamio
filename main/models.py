@@ -4,7 +4,7 @@ from django.db import models
 class Item(models.Model):
     # Atribut wajib
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) # untuk menambahkan id pengguna
-    name = models.CharField(max_length=255) # untuk memasukkan nama pengguna
+    name = models.CharField(max_length=255) # untuk memasukkan nama pengguna yang melakukan pemesanan
     price = models.IntegerField() # untuk memasukkan harga makanan
     description = models.TextField() # untuk memasukkan deskripsi dari makanan sesuai keinginan customer
 
