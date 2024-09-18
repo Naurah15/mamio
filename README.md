@@ -34,7 +34,7 @@ Setelah ini tampilan platform yang kita buat dapat dilihat pada link yang terter
 
 Jawaban:
 
-![alt text](<bagan pbp.png>)
+![bagan pbp](https://github.com/user-attachments/assets/1069b46a-54fc-4d15-a524-e30d0edbc7eb)
 
 Pada bagan yang saya buat terdapat alur yang memproses jalannya pengolahanan request dari berupa request client hingga menghasilkan suatu output sesuai dengan kemauan client. adapun tahapannya adalah sebagai berikut:
 
