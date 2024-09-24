@@ -181,25 +181,67 @@ Tugas 4
 
 Jawab:
 
+HttpResponseRedirect() dan redirect() di Django adalah dua metode yang digunakan untuk mengarahkan pengguna ke halaman lain, tetapi masing-masing memiliki cara kerja yang berbeda. HttpResponseRedirect() hanya menerima URL sebagai argumennya dan digunakan untuk membuat respons HTTP dengan status 302, yang memberi tahu browser untuk mengarahkan pengguna ke URL tertentu. Ini membuat HttpResponseRedirect() kurang fleksibel karena hanya dapat bekerja dengan URL yang ditentukan secara eksplisit. 
+
+Di sisi lain, redirect() adalah fungsi yang lebih fleksibel dan serbaguna. Selain bisa menerima URL langsung, redirect() juga dapat menerima nama view Django atau parameter yang diperlukan untuk mengarahkan pengguna. Ini memungkinkan pengalihan tanpa harus menentukan URL secara manual, sehingga lebih efisien dalam berbagai situasi. Meskipun lebih fleksibel, pada akhirnya redirect() tetap menghasilkan HttpResponseRedirect di latar belakang untuk menyelesaikan pengalihan. Oleh karena itu, redirect() sering kali lebih disukai dalam pengembangan aplikasi Django karena memberikan lebih banyak kemudahan dan fleksibilitas dibandingkan dengan HttpResponseRedirect().
+
 2) Jelaskan cara kerja penghubungan model MoodEntry dengan User!
 
-Jawab:
+Jawab: 
+
+Penghubungan model MoodEntry dengan User di Django bisa dilakukan dengan cara kerja penghubungan model Product dan User. Dalam hal ini, kita menggunakan ForeignKey untuk mengaitkan setiap entri mood dengan pengguna yang membuatnya. Dengan menambahkan ForeignKey di model MoodEntry yang merujuk pada model User, kita dapat memastikan bahwa setiap entri mood terkait dengan satu pengguna tertentu.
+
+Cara kerja ini memungkinkan kita untuk mengelola dan melacak semua entri mood yang dibuat oleh setiap pengguna secara efisien. Setiap kali pengguna membuat entri mood baru, data pengguna tersebut akan disimpan dalam field ForeignKey, sehingga kita bisa dengan mudah mengambil semua entri mood yang terkait dengan pengguna tersebut di masa mendatang. Dengan demikian, Django memudahkan untuk mengelola data, menampilkan, atau memproses entri mood berdasarkan pengguna yang bersangkutan.
+
+Secara keseluruhan, penghubungan antara MoodEntry dan User dengan ForeignKey memungkinkan kita untuk memiliki struktur data yang terorganisir, di mana setiap pengguna dapat memiliki banyak entri mood, namun setiap entri mood hanya dimiliki oleh satu pengguna. Hal ini memastikan relasi yang jelas dan terstruktur antara entri mood dan pengguna di dalam aplikasi Django.
+
 
 3) Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
 
 Jawab:
 
+Authentication dan authorization adalah dua konsep penting dalam keamanan aplikasi, tetapi keduanya memiliki makna yang berbeda. 
+
+Authentication adalah proses untuk memverifikasi identitas pengguna. Ini adalah langkah awal yang memastikan bahwa pengguna adalah siapa yang mereka klaim. Biasanya, ini dilakukan melalui kombinasi nama pengguna dan kata sandi. Saat pengguna melakukan login, aplikasi akan memeriksa kredensial yang diberikan dengan informasi yang ada di basis data untuk menentukan apakah pengguna tersebut valid. Di sisi lain, authorization adalah proses untuk menentukan apakah pengguna yang telah terautentikasi memiliki izin untuk mengakses sumber daya tertentu atau melakukan tindakan tertentu dalam aplikasi. Setelah pengguna berhasil login, aplikasi akan memeriksa hak akses pengguna tersebut untuk memastikan bahwa mereka memiliki izin untuk melihat halaman, mengedit data, atau menjalankan fungsi tertentu.
+
+Dalam implementasi Django, kedua konsep ini ditangani dengan baik. Django menyediakan sistem authentication yang built-in yang memungkinkan developer untuk dengan mudah mengelola pengguna dan kredensial mereka. Ketika pengguna melakukan login, Django menggunakan authenticate() untuk memverifikasi kredensial dan login() untuk menyimpan informasi pengguna ke dalam sesi.  Untuk authorization, Django memiliki sistem permission yang memungkinkan developer untuk menetapkan izin tertentu kepada pengguna atau grup pengguna. Kita dapat menggunakan decorators seperti @login_required untuk melindungi view tertentu dari pengguna yang belum login, dan @permission_required untuk memastikan bahwa pengguna memiliki izin yang diperlukan untuk mengakses fitur tertentu. Secara keseluruhan, authentication dan authorization adalah dua aspek yang saling melengkapi dalam pengelolaan akses pengguna dalam aplikasi, dan Django menyediakan alat yang kuat untuk menangani keduanya dengan efisien.
+
 4) Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
 
 Jawab: 
+
+Django mengingat pengguna yang sudah login dengan menggunakan session. Setelah pengguna login, Django membuat sesi khusus yang menyimpan informasi tentang pengguna tersebut. Sesi ini disimpan di server, dan Django mengirimkan cookie ke browser pengguna, yang berisi ID sesi. Cookie ini membantu Django mengenali pengguna saat mereka berpindah halaman di aplikasi, sehingga mereka tidak perlu login ulang setiap kali membuka halaman baru. Dengan begitu, Django tahu siapa yang sedang menggunakan aplikasinya.
+
+Selain untuk mengingat pengguna yang sudah login, cookies juga punya kegunaan lain. Cookies bisa menyimpan preferensi pengguna, seperti pilihan bahasa atau pengaturan tampilan. Ini membuat pengalaman menggunakan aplikasi jadi lebih personal. Cookies juga bisa dipakai untuk melacak aktivitas pengguna, seperti halaman apa yang sering dikunjungi. Informasi ini berguna bagi pengembang untuk memperbaiki fitur dan tampilan situs web.
+
+Namun, tidak semua cookies aman digunakan. Ada risiko keamanan seperti serangan XSS atau pencurian sesi, di mana penjahat siber bisa mencuri informasi dari cookie dan masuk ke akun pengguna. Oleh karena itu, penting untuk memastikan cookies disimpan dengan aman. Misalnya, dengan menggunakan pengaturan HttpOnly dan Secure pada cookie agar cookie tidak bisa diakses oleh orang lain. Selain itu, pengguna juga perlu berhati-hati dengan cookie dari situs yang tidak terpercaya dan bisa mengatur privasi di browser agar lebih aman.
 
 5) Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
 Jawab:
 
+Langkah 1: Membuat Fungsi dan form registrasi
+Pada tahap ini saya memulai dengan mengaktifkan virtual environment dan membuka views.py untuk menambahkan UserCreationForm dan messages. UserCreationForm memudahkan pembuatan formulir registrasi pengguna tanpa menulis kode dari awal, sementara messages digunakan untuk memberikan feedback kepada pengguna setelah mereka berhasil membuat akun. Kemudian, saya membuat fungsi register yang menghasilkan formulir registrasi. Jika pengguna mengisi formulir dan inputnya valid, datanya akan disimpan dan pesan sukses akan muncul. Setelah itu, saya membuat berkas register.html untuk menampilkan formulir ini dengan menggunakan template HTML yang mempermudah proses input. lalu saya menambahkan path URL di urls.py untuk memastikan bahwa halaman registrasi dapat diakses dari browser, sehingga pengguna bisa mendaftar akun sebelum mengakses halaman utama.
 
+Langkah 2: Membuat fungsi login
+Pada tahap ini saya membuka file views.py dan menambahkan kode untuk mengimpor authenticate, login, dan AuthenticationForm yang digunakan untuk memverifikasi username dan password, dan login jika valid. Setelah itu, saya membuat fungsi login_user yang menampilkan form login dan memproses data pengguna. Jika input benar, pengguna akan masuk dan diarahkan ke halaman utama. Selanjutnya, saya membuat file login.html untuk menampilkan form login, lengkap dengan tombol login dan link ke halaman registrasi. Terakhir, saya menambahkan path URL di urls.py agar halaman login bisa diakses. Setelah ini, pengguna bisa login sebelum mengakses halaman utama, dan selanjutnya akan ditambahkan fitur logout beserta tombolnya di halaman utama.
 
+Langkah 3: Membuat fungsi logout
+Pada tahap ini saya menambahkan impor logout untuk menangani proses keluar dari akun. Lalu, saya membuat fungsi logout_user yang berfungsi untuk menghapus sesi pengguna yang sedang login dan mengarahkan mereka kembali ke halaman login. Setelah itu, saya membuka file main.html dan menambahkan tombol logout dengan menggunakan tag {% url 'main:logout' %} untuk mengarahkan pengguna ke fungsi logout secara dinamis. Terakhir, saya menambahkan path URL untuk fungsi logout di urls.py, sehingga halaman logout bisa diakses. Dengan langkah ini, sistem autentikasi pada proyek selesai dan sekarang user dapat login dan logout dengan mudah.
 
+Langkah 4: Merestriksi Akses Halaman Main
+Saya membuka file views.py dan menambahkan impor login_required, yang berfungsi untuk membatasi akses halaman hanya untuk pengguna yang sudah login. Selanjutnya, saya menambahkan decorator @login_required(login_url='/login') di atas fungsi show_main, sehingga pengguna harus login terlebih dahulu sebelum bisa mengakses halaman utama. Setelah menambahkan pembatasan ini, saya menjalankan proyek menggunakan perintah python manage.py runserver, dan ketika membuka halaman utama di browser, pengguna yang belum login akan otomatis diarahkan ke halaman login.
 
+Langkah 5: Membyat 2 akun pengguna dengan masing-masing 3 dummy data.
+Pada tahap ini saya melakukan registrasi user dengan memasukkan username serta password. Setelah berhasil registrasi, saya melakukan login dan membuat order makanan yang diinginkan oleh saya sebagai user. Saya melakukan 3 kali order untuk tiap 1 account sehingga terciptalah 3 dummy data. Hal ini juga saya lakukan pada account ke dua yang saya buat.
+
+Langkah 6: Menggunakan Data Dari Cookies
+Pada tahap ini saya menambahkan fungsionalitas penggunaan cookies pada aplikasi Django dengan menampilkan data last login di halaman utama. Setelah logout, saya membuka kembali file views.py dan mengimpor HttpResponseRedirect, reverse, dan datetime. Pada fungsi login_user, saya menambahkan cookie last_login menggunakan response.set_cookie('last_login', str(datetime.datetime.now())) setelah login berhasil. Kemudian, di fungsi show_main, saya menambahkan cookie last_login ke dalam konteks yang akan ditampilkan. Pada fungsi logout_user, saya menambahkan perintah untuk menghapus cookie menggunakan response.delete_cookie('last_login'). Terakhir, saya mengubah template main.html untuk menampilkan informasi login terakhir dengan menambahkan <h5>Sesi terakhir login: {{ last_login }}</h5>. Saat proyek dijalankan, data last login akan muncul di halaman utama, dan saya bisa melihat cookie yang dihasilkan pada browser melalui fitur inspect element di bagian cookies.
+
+Langkah 7: Menghubungkan Model Item dengan User
+Pada tahap ini saya menghubungkan model Item dengan user yang membuatnya sehingga pengguna hanya bisa melihat item yang mereka buat sendiri. Dimulai dengan membuka models.py, saya menambahkan from django.contrib.auth.models import User untuk mengimpor model User, lalu menambahkan field user sebagai ForeignKey di model Item untuk menghubungkannya dengan user. Setelah itu, saya membuka views.py dan memperbarui fungsi create_item dengan commit=False agar objek tidak langsung disimpan ke database, hal ini memungkinkan saya untuk menambahkan data user dari request.user. Di fungsi show_main, saya mengubah value item_entries untuk hanya menampilkan item yang terkait dengan pengguna yang login. Selanjutnya, saya melakukan migrasi model dengan perintah python manage.py makemigrations dan migrate, dan memilih opsi default value untuk menghindari error saat migrasi. Terakhir, saya mengatur environment production dengan mengubah variabel DEBUG di settings.py, dan ketika dijalankan, hanya item yang dibuat oleh user yang sedang login akan ditampilkan di halaman utama.
+
+Langkah 8: Membuat readme dan melakukan push ke pws
+Pada tahap ini saya menjawab pertanyaan yang diminta pada soal ke dalam readme. Setelah saya selesai menjawab saya melakukan add, commit, dan push ke repositori GitHub menggunakan perintah git add ., git commit -m "<pesan_commit>", dan git push -u origin <branch_utama>. karena sebelumnya saya sudah membuat deploy.yml maka setiap kali melakukan add, commit, dan push ke github program juga akan otomatis di push ke pws. Setelah ini tampilan program dapat diakses orang lain melalui internet.
 
 
