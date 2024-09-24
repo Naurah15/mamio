@@ -5,7 +5,6 @@ NPM : 2306245900
 Kelas : PBP B
 
 Tugas 2
-
 1) Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)
 
 Jawaban:
@@ -28,13 +27,14 @@ Langkah 7: Pada langkah ini saya membuat file urls.py yang berada di aplikasi ma
 
 Langkah 8: Selanjutnya saya menambahkan routing pada urls.py pada project mamio. Langkah ini bertujuan untuk memastikan bahwa URL dari project utama dan bisa diarahkan ke aplikasi main yang sebelumnya sudah dibuat.
 
-Langkah 9: Langkah terakhir yang saya lakukan adalah melakukan deployment project mamio ke platform web service (PWS). Hal ini bertujuan untuk membuat project diunggah ke server PWS agar bisa diakses orang lain melalui internet. Setelah ini tampilan platform yang kita buat dapat dilihat pada link yang tertera.
+Langkah 9: Langkah terakhir yang saya lakukan adalah melakukan deployment project mamio ke platform web service (PWS). Hal ini bertujuan untuk membuat project diunggah ke server PWS agar bisa diakses orang lain melalui internet.
+Setelah ini tampilan platform yang kita buat dapat dilihat pada link yang tertera.
+
 
 2) Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
 
 Jawaban:
-
-![alt text](<bagan pbp.png>)
+![bagan pbp](https://github.com/user-attachments/assets/1069b46a-54fc-4d15-a524-e30d0edbc7eb)
 
 Pada bagan yang saya buat terdapat alur yang memproses jalannya pengolahanan request dari berupa request client hingga menghasilkan suatu output sesuai dengan kemauan client. adapun tahapannya adalah sebagai berikut:
 
@@ -196,7 +196,6 @@ Jawab:
 5) Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
 Jawab:
-
 
 
 
