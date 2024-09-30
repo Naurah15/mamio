@@ -27,3 +27,5 @@ class Item(models.Model):
     @property
     def final_price(self):
         return self.price - (self.price * (self.discount / 100))  # Menghitung harga setelah diskon
+
+

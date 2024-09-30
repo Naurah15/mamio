@@ -1,15 +1,14 @@
 import datetime
-from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.shortcuts import render, redirect   # Tambahkan import redirect di baris ini
+from django.shortcuts import render, redirect, reverse   # Tambahkan import redirect di baris ini
 from main.forms import ItemForm
 from main.models import Item
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
 
 # Create your views here.
@@ -89,3 +88,26 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_item(request, id):
+    # Mendapatkan item berdasarkan id
+    get_item = Item.objects.get(pk = id)
+
+    # Set get_item sebagai instance dari form
+    form = ItemForm(request.POST or None, instance=get_item)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_item.html", context)
+
+def delete_item(request, id):
+    # Get mood berdasarkan id
+    get_menu_item = Item.objects.get(pk = id)
+    # Hapus mood
+    get_menu_item.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
