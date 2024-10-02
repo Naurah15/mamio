@@ -21,7 +21,7 @@ def show_main(request):
         'name': 'Naurah Iradya Kurniawan',
         'class': 'PBP B',
         'item_entries': item_entries, 
-        'last_login': request.COOKIES['last_login'],
+        'last_login': request.COOKIES.get('last_login'),
         
     }
 
