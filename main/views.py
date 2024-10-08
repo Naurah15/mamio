@@ -10,17 +10,18 @@ from main.forms import ItemForm
 from main.models import Item
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
-    item_entries = Item.objects.filter(user=request.user)
     context = {
         'name': request.user.username,
         'npm' : '2306245900',
         'name': 'Naurah Iradya Kurniawan',
         'class': 'PBP B',
-        'item_entries': item_entries, 
         'last_login': request.COOKIES.get('last_login'),
         
     }
@@ -40,11 +41,11 @@ def create_item(request):
     return render(request, "create_item.html", context)
 
 def show_xml(request):
-    data = Item.objects.all()
+    data = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
-    data = Item.objects.all()
+    data = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml_by_id(request, id):
@@ -77,6 +78,8 @@ def login_user(request):
             response = HttpResponseRedirect(reverse("main:show_main"))
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
+      else:
+            messages.error(request, "Invalid username or password. Please try again.")
 
    else:
       form = AuthenticationForm(request)
@@ -111,3 +114,31 @@ def delete_item(request, id):
     get_menu_item.delete()
     # Kembali ke halaman awal
     return HttpResponseRedirect(reverse('main:show_main'))
+
+@csrf_exempt
+@require_POST
+def add_item_entry_ajax(request):
+    # Mendapatkan data dari POST request dan menggunakan strip_tags untuk membersihkan HTML tags
+    name = strip_tags(request.POST.get("name"))  # strip HTML tags dari name
+    price = strip_tags(request.POST.get("price"))  # strip HTML tags dari price
+    description = strip_tags(request.POST.get("description"))  # strip HTML tags dari description
+    stock = strip_tags(request.POST.get("stock", 0))  # strip HTML tags dari stock, set default 0 jika tidak disediakan
+    category = strip_tags(request.POST.get("category"))  # strip HTML tags dari category
+    rating = strip_tags(request.POST.get("rating", 0))  # strip HTML tags dari rating, set default 0 jika tidak disediakan
+    user = request.user  # Mendapatkan user yang sedang login
+
+    # Membuat item baru dengan data yang sudah dibersihkan
+    new_item = Item(
+        user=user,
+        name=name,
+        price=int(price),  # Pastikan harga adalah integer
+        description=description,
+        stock=int(stock),  # Pastikan stok adalah integer
+        category=category,
+        rating=float(rating),  # Pastikan rating adalah float
+    )
+    
+    # Menyimpan item baru ke database
+    new_item.save()
+
+    return HttpResponse(b"CREATED", status=201)
